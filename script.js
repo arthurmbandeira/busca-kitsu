@@ -1,14 +1,44 @@
 window.onload = function () {
-    getCharactersData();
+    var url = new URL(window.location.href);
+    var page = url.searchParams.get("page");
+    getCharactersData(page);
+    
+    
 }
+// window.onchange = function () {
+//     var url = new URL(window.location.href);
+//     var page = url.searchParams.get("page");
+//     getCharactersData(page);
+// }
 
-var getCharactersData = function () {
-    var url = 'https://kitsu.io/api/edge/characters';
+var getCharactersData = function (page) {
+    var currPage = page ? parseInt(page) : 0; 
+    var url = currPage ? 'https://kitsu.io/api/edge/characters?page[limit]=10&page[offset]=' + ((currPage - 1) * 10) : 'https://kitsu.io/api/edge/characters';
     fetch(url).then(function (response) {
         return response.json();
-    }).then(function (data) {
-        var charactersData = data.data;
-        // console.log(charactersData);
+    }).then(function (json) {
+        console.log(json);
+        
+        var charactersData = json.data;
+        var numPages = Math.min(((window.innerWidth > 894) ? 6 : 3), (json.meta.count / 10));
+        // var pagination = document.getElementById('pagination');
+        var previousLink = document.getElementById('previousLink');
+        var nextLink = document.getElementById('nextLink');
+        if (currPage) {
+            previousLink.children[0].setAttribute('href', window.location.pathname + '?page=' + (currPage - 1));
+        } else {
+            previousLink.children[0].setAttribute('disabled', 'disabled')
+        }
+        nextLink.children[0].setAttribute('href', window.location.pathname + '?page=' + (currPage + 1));
+        
+        for (var i = numPages + (currPage) ; i > currPage; i--) {
+            var node = createElementAddAttribute('li', 'class', (currPage == (i - 1) ? 'active' : ''));
+            var aLink = createElementAddAttribute('a', 'href', window.location.pathname + '?page=' + i);
+            aLink.innerText = i;
+            node.appendChild(aLink);
+            previousLink.parentNode.insertBefore(node, previousLink.nextSibling);
+        }
+
         var listElement = document.getElementById('charactersList');
         charactersData.forEach(function (item) {
             var listItem = createElementAddAttribute('div', 'class', 'list-item');
