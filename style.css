@@ -9,19 +9,66 @@ body {
     border: 0;
     max-width: 100%;
     font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+}
+h1, h2, h3, h4, h5, p {
+    margin: 0;
+    font-weight: 400;
+}
+a {
+    color: inherit;
+    text-decoration: none;
 }
 .container {
     width: 1280px;
     margin: auto;
-    padding: 20px 42px 0;
+    padding: 0 42px;
 }
 .container::before,
 .container::after {
     content: '';
     clear: both;
 }
+.row {
+    display: flex;
+    margin-left: -5px;
+    margin-right: -5px;
+}
+[class^="col-"] {
+    position: relative;
+    margin: 0;
+    padding: 0 5px;
+}
+.col-25 {
+    width: 25%;
+    flex: 0 0 25%;
+}
+.col-75 {
+    width: 75%;
+    flex: 0 0 75%;
+}
+.img-container {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background-size: cover;
+    background-position: top center;
+}
+.img-container img {
+    display: none;
+}
+.color-red {
+    color: #d42026;
+}
+.color-white {
+    color: #ffffff;
+}
+.bg-red {
+    background-color: #d42026;
+}
 header {
     width: 100%;
+    padding-top: 20px;
 }
 header .header-content {
     display: flex;
@@ -34,8 +81,84 @@ header .header-content h2 {
     line-height: 1.2;
     font-weight: 300;
     margin: 0;
-    color: #d42026;
 }
 header .header-content h2 span {
     font-weight: 900;
+}
+header .header-content h2 .detail {
+    width: 54px;
+    height: 4px;
+}
+main {
+    margin-bottom: 16px;
+}
+main .search-section {
+    margin: 34px auto;
+    width: 100%;
+}
+main .search-section .search-field label {
+    font-size: 16px;
+    line-height: 1.2;
+    display: inline-block;
+}
+main .search-section .search-field input {
+    border: 1px solid #a5a5a5;
+    width: 400px;
+    height: 31px;
+    display: block;
+    margin: 0;
+    border-radius: 3px;
+    padding: 3px;
+    font-size: 16px;
+    line-height: 1.2;
+    color: #4e4e4e;
+}
+main .list-section .list-header h3 {
+    font-size: 16px;
+    line-height: 1.2;
+    padding: 9px 15px;
+}
+main .list-content .list-item {
+    height: 112px;
+    border-bottom: 2px solid rgba(212, 32, 38, 0.5);
+}
+main .list-content .list-item:hover {
+    background-color: rgba(212, 32, 38, 0.1);
+}
+main .list-content .list-item .row {
+    max-height: 100%;
+    overflow: hidden;
+}
+main .list-content .list-item .char-info {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    padding: 20px 10px;
+}
+main .list-content .list-item .char-info .img-container {
+    margin-right: 25px;
+    flex: 0 0 56px;
+}
+main .list-content .list-item h4,
+main .list-content .list-item p {
+    font-size: 21px;
+    color: #4e4e4e;
+    line-height: 1.1;
+}
+main .list-content .list-item .char-description {
+    overflow: hidden;
+    display: flex;
+    padding: 20px 10px;
+    max-height: 100%;
+}
+main .list-content .list-item .char-description p {
+    overflow: hidden;
+    max-height: 100%;
+}
+footer {
+    margin-top: 16px;
+}
+footer .bg-footer {
+    height: 12px;
+    width: 100%;
 }
