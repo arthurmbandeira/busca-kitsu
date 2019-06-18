@@ -154,7 +154,8 @@ main .list-content .list-item {
     border-bottom: 2px solid rgba(212, 32, 38, 0.5);
 }
 main .list-content .list-item:last-of-type {
-    border-bottom: none;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
 }
 main .list-content .list-item:hover {
     background-color: rgba(212, 32, 38, 0.1);
@@ -200,8 +201,6 @@ main .pagination-section .pagination {
     display: flex;
     align-items: center;
     justify-content: center;
-
-    /* margin: 16px auto; */
     margin: 30px auto;
 }
 main .pagination-section .pagination li {
@@ -214,20 +213,18 @@ main .pagination-section .pagination li {
     display: flex;
     align-items: center;
     justify-content: center;
-}
-main .pagination-section .pagination li.active {
-    background-color: #d42026;
-}
-main .pagination-section .pagination li a {
     color: #d42026;
     font-size: 21px;
     line-height: 1.1;
 }
-main .pagination-section .pagination li a.disabled {
+main .pagination-section .pagination li.active {
+    background-color: #d42026;
+}
+main .pagination-section .pagination li.disabled {
     pointer-events: none;
     color: rgba(212, 32, 38, 0.65);
 }
-main .pagination-section .pagination li.active a {
+main .pagination-section .pagination li.active {
     color: #ffffff;
 }
 main .pagination-section .pagination li:nth-child(2) {
@@ -238,12 +235,14 @@ main .pagination-section .pagination .page-control {
     border-radius: 0; 
     width: 12px;
     height: 16px;
+    cursor: pointer;
 }
 main .pagination-section .pagination .page-control:last-of-type {
     margin-left: 12px;
     margin-right: 20px;
 }
-main .pagination-section .pagination .page-control a:disabled {
+main .pagination-section .pagination .page-control:disabled {
+    border: 1px solid transparent;
     color: rgba(212, 32, 38, 0.65);
 }
 .modal {

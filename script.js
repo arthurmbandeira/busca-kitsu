@@ -1,9 +1,5 @@
-
-
 window.onload = function () {
-    var url = new URL(window.location.href);
-    var page = url.searchParams.get("page");
-    getCharactersData(page);
+    getCharactersData();
 
     var close = document.querySelector('button[data-close="modal"]');
     close.onclick = function (event) {   
@@ -14,13 +10,33 @@ window.onload = function () {
     }
     
     var searchEl = document.getElementById('search');
-    searchEl.onchange = function (e) {
+    searchEl.onchange = function () {
         getCharactersData(0, this.value);
-    }   
+    }
+    var paginationEl = document.getElementById('pagination');
+    
+    paginationEl.onclick = function (e) {
+        e.preventDefault();
+        var pageValue = e.target.dataset['page'];
+        if (pageValue) {
+            if (searchEl.value !== '') {
+                getCharactersData(pageValue, searchEl.value);
+            } else {
+                getCharactersData(pageValue);
+            }
+        }
+    }
 }
 
 function getCharactersData (page, query) {
-    var currPage = page ? parseInt(page) <= 0 ? 1 : parseInt(page) : 1;
+    var activePage = document.querySelector('.page.active');
+    if (page === 'prev') {
+        currPage = parseInt(activePage.dataset['page']) - 1;
+    } else if (page === 'next') {
+        currPage = parseInt(activePage.dataset['page']) + 1;
+    } else {
+        currPage = page ? parseInt(page) <= 0 ? 1 : parseInt(page) : 1;
+    }
     var filter = query ? 'filter[name]=' + query : '';
     var url = currPage ? 'https://kitsu.io/api/edge/characters?page[limit]=10&page[offset]=' + ((currPage - 1) * 10) + '&' + filter : 'https://kitsu.io/api/edge/characters' + '?' + filter;
     var loader = `<div class="loader"></div>`;
@@ -29,8 +45,8 @@ function getCharactersData (page, query) {
     fetch(url).then(function (response) {
         removeElementsByClassName('page');
         return response.json();
-    }).then(function (json) {
-        createPagination(currPage, 1000, filter);
+    }).then(function (json) {        
+        createPagination(currPage, Math.min(1000, json.meta.count), filter);
         createCharacterListElement(json.data);        
     }).catch(function (err) {
         console.log(err);
@@ -95,7 +111,6 @@ function createCharacterListElement (charData) {
             adaptImg(target.querySelector('.char-img'));
             
             var charUrl = 'https://kitsu.io/api/edge/characters/' + item.dataset.id;
-
             
             target.querySelector('.char-description p').innerHTML = loader;
             fetch(charUrl).then(function (response) {
@@ -152,44 +167,32 @@ window.onclick = function(event) {
     }
 }
 
-function createPagination (currPage, count, filter) {
+function createPagination (currPage, count) {    
     var numPages = Math.min(6, (count / 10));
     var totalPages =  Math.ceil((count / 10));
-    var previousLink = document.getElementById('previousLink');
+    var prevLink = document.getElementById('prevLink');
     var nextLink = document.getElementById('nextLink');
-    var query = filter ? filter : ''
-    if (currPage !== 1) {
-        previousLink.children[0].setAttribute('href', window.location.pathname + '?page=' + (currPage - 1));
+    
+    if (currPage === 1) {
+        prevLink.classList.add('disabled');
+    } else if (currPage >= totalPages) {
+        nextLink.classList.add('disabled');;
     } else {
-        previousLink.children[0].setAttribute('href', '#');
-        previousLink.children[0].setAttribute('class', 'disabled');
+        prevLink.setAttribute('class', 'page-control');
+        nextLink.setAttribute('class', 'page-control');
     }
-    if (currPage < totalPages) {
-        nextLink.children[0].setAttribute('href', window.location.pathname + '?page=' + (currPage + 1));
-    } else {
-        nextLink.children[0].setAttribute('href', '#');
-        nextLink.children[0].setAttribute('class', 'disabled');
+    var pageItems = prevLink.outerHTML;
+    for (var i = currPage; i < (Math.min(currPage, totalPages) + numPages); i++) {
+        var pageClass = (currPage == i) ? 'active page' : 'page';
+        var hideMobile = (Math.floor(3 + currPage) <= i) ? 'hide-mobile' : '';
+        var disable = (i > totalPages) ? 'disabled' : '';
+        pageItems += `<li class="${pageClass} ${hideMobile} ${disable}" data-page="${i}" style="cursor:pointer">
+                          ${i}
+                      </li>`;
     }
-    for (var i = currPage; i < Math.min(numPages + currPage, totalPages); i++) {
-        // var hidePages = `hide-mobile`;
-        var node = createElementAddAttribute('li', 'class', (currPage == i) ? 'active page' : 'page');
-        var aLink = createElementAddAttribute('a', 'href', window.location.pathname + '?page=' + i);
-        if (Math.floor(3 + currPage) <= i) {
-            node.classList.add('hide-mobile');
-        }
-        node.classList.add()
-        aLink.innerText = i;
-        node.appendChild(aLink);
-        previousLink.parentNode.insertBefore(node, nextLink);
-    }
+    pageItems += nextLink.outerHTML;
+    document.getElementById('pagination').innerHTML = pageItems;
 }
-
-// function removeChildren (p) {
-//     var parent = document.getElementById(p);
-//     while (parent.firstChild) {
-//         parent.firstChild.remove();
-//     }
-// }
 
 function removeElementsByClassName (className) {
     var elements = document.getElementsByClassName(className);
@@ -197,7 +200,3 @@ function removeElementsByClassName (className) {
         elements[0].parentNode.removeChild(elements[0]);
     }
 }
-
-// function openModal(modal) {
-//     modal.classList.push('show');
-// }
