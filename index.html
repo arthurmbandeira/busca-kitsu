@@ -30,7 +30,7 @@
                 <form action="">
                     <div class="search-field">
                         <label class="color-red" for="name">Nome do Personagem</label>
-                        <input type="text" name="name">
+                        <input id="search" type="text" name="name">
                     </div>
                 </form>
             </div>
@@ -50,14 +50,53 @@
             <div class="pagination-section">
                 <ul id="pagination" class="pagination">
                     <li id="previousLink" class="page-control"><a href="#">&#9666;</a></li>
-                    <!-- <li class="active"><a href="#">1</a></li> -->
-                    <!-- <li><a href="">2</a></li>
-                    <li><a href="">3</a></li> -->
-                    <!-- <li><a href="">4</a></li>
-                    <li><a href="">5</a></li>
-                    <li><a href="">6</a></li> -->
                     <li id="nextLink" class="page-control"><a href="#">&#9656;</a></li>
                 </ul>
+            </div>
+        </div>
+        <div class="modal" id="modal">
+            <div class="modal-container">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title color-white">Detalhes</h5>
+                        <button type="button" data-close="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="char-details">
+                            <div class="char-header char-section">
+                                <div class="char-img img-container">
+                                    <img src="" alt="">
+                                </div>
+                                <div class="char-name">
+                                    <h2></h2>
+                                </div>
+                            </div>
+                            <div class="char-description char-section">
+                                <div class="char-title">
+                                    <h3>Descrição</h3>
+                                </div>
+                                <p></p>
+                            </div>
+                            <div class="char-media char-section">
+                                <div class="char-title">
+                                    <h3>Mídia</h3>
+                                </div>
+                                <ul>
+                                    <li>
+                                        <!-- <a href="" target="_blank"> -->
+                                            <div class="media-img img-container">
+                                                <img src="" alt="">
+                                            </div>
+                                            <h5></h5>
+                                        <!-- </a> -->
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="modal-footer"></div>
+                </div>
             </div>
         </div>
     </main>
